@@ -1,7 +1,7 @@
 lateral-tornado-api
 =============================
 
-What is this?
+About
 -------------
 
 This is a simple example of using asyncio event loop with tornado to create a REST application.

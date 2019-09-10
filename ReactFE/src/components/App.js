@@ -1,27 +1,37 @@
 import React, { Component } from 'react';
-import unsplash from '../api/unsplash';
+import axios from 'axios';
+
 import SearchBar from './SearchBar';
-import ImageList from './ImageList';
+import SearchList from './SearchList';
+
+import { API_HOST } from '../api/config';
 
 class App extends Component {
   state = {
-    images: []
+    searchResults: [],
+    text: ''
   };
-  onSearchSubmit = async term => {
-    const response = await unsplash.get('/search/photos', {
-      params: { query: term }
-    });
 
+  onSearchSubmit = async text => {
+        axios.post(
+          API_HOST + '/recommendations', 
+          text,
+  )
+  .then((res) => {
+    console.log("AXIOS RESPONSE: ", res.data.results);
     this.setState({
-      images: response.data.results
+      searchResults: res.data.results
     });
-  };
+  })
+  .catch((err) => {
+    console.log("AXIOS ERROR: ", err);
+  });
+}
   render() {
     return (
       <div className="ui container" style={{ marginTop: '20px' }}>
         <SearchBar onSubmit={this.onSearchSubmit} />
-        Found: {this.state.images.length} images
-        <ImageList images={this.state.images} />
+        <SearchList searchResults={this.state.searchResults} />
       </div>
     );
   }
